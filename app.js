@@ -3,13 +3,12 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-var mongoose = require('mongoose'); // Ajoutez cette ligne
+var mongoose = require('mongoose');
+const PORT = process.env.PORT || 3001;
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+var indexRouter = require('./routes/auth');
 
 var app = express();
-
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -24,7 +23,11 @@ db.once('open', () => {
   console.log('Connecté à la base de données MongoDB');
 });
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/auth', indexRouter);
+
+app.listen(PORT, () => {
+  console.log(`Serveur en cours d'exécution sur le port ${PORT}`);
+});
+
 
 module.exports = app;

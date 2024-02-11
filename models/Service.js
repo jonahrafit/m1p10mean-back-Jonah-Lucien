@@ -2,10 +2,10 @@
 const mongoose = require('mongoose');
 
 const serviceSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  price: { type: Number, required: true },
-  duration: { type: Number, required: true },
-  commissionPercentage: { type: Number, required: true }
+  nom: { type: String, required: true },
+  prix: { type: Number, required: true },
+  duree: { type: Number, required: true },
+  commission: { type: Number, required: true }
 });
 
 const Service = mongoose.model('Service', serviceSchema);
