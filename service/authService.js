@@ -5,14 +5,16 @@ const User = require('../models/User');
 const Manager = require('../models/Manager');
 const Employe = require('../models/Employe');
 const { sendConfirmationEmail } = require('./mailService');
+const Client = require('../models/Client');
 
 async function register(email, nom, prenom, motDePasse, role) {
     try {
         const hashedPassword = await bcrypt.hash(motDePasse, 10);
         const existingUser = await User.findOne({ email });
         const existingManager = await Manager.findOne({ email });
+        const existingClient = await Client.findOne({ email });
 
-        if (existingUser !== null || existingManager !== null) {
+        if (existingUser !== null || existingManager !== null || existingClient !== null) {
             throw new Error("L'e-mail existe déjà");
         }
 
@@ -23,6 +25,11 @@ async function register(email, nom, prenom, motDePasse, role) {
             const employe = new Employe({ email, nom, prenom, horaireTravail: 'HT', estValide: false, estConfirme: false, tauxCommission: 0 });
             await sendConfirmationEmail(email);
             await employe.save();
+        }
+        else if (role === 'client') {
+            const client = new Client({ email, nom, prenom, preferenceEmploye: [], preferenceService: [] });
+            await sendConfirmationEmail(email);
+            await client.save();
         }
 
         const user = new User({ email, motDePasse: hashedPassword, role });

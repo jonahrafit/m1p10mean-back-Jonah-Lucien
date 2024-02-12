@@ -1,12 +1,12 @@
 const mongoose = require('mongoose');
 
 const preferenceEmployeSchema = new mongoose.Schema({
-    employe: { type: mongoose.Schema.Types.ObjectId, ref: 'Employe', required: true },
+    employe: { type: mongoose.Schema.Types.ObjectId, ref: 'Employe' },
     niveauEtoile: { type: Number, min: 0, max: 5, default: 0 }
 });
 
 const preferenceServiceSchema = new mongoose.Schema({
-    service: { type: mongoose.Schema.Types.ObjectId, ref: 'Service', required: true },
+    service: { type: mongoose.Schema.Types.ObjectId, ref: 'Service' },
     niveauEtoile: { type: Number, min: 0, max: 5, default: 0 }
 });
 
