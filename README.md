@@ -4,7 +4,6 @@
 /auth/users         GET                                                     liste users
 
 # Insription
-
 ## role 
     manager
     employee
@@ -31,3 +30,9 @@ si role === client
     seul le mail confirmé
     et mail validé par le manager
     
+# Horaire de travail
+un emploi doit avoir au moins un jour de travail 
+exemple d'horaire de travail:
+    monday : 09 - 12 , 13 - 17
+    tuesday : 09 - 17
+    ...
