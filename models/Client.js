@@ -15,7 +15,8 @@ const clientSchema = new mongoose.Schema({
     prenom: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     preferenceEmploye: [preferenceEmployeSchema],
-    preferenceService: [preferenceServiceSchema]
+    preferenceService: [preferenceServiceSchema],
+    estConfirme: { type: Boolean, required: true }
 });
 
 const Client = mongoose.model('Client', clientSchema);

@@ -9,6 +9,9 @@ require('dotenv').config();
 const PORT = process.env.PORT || 3001;
 
 var indexRouter = require('./routes/auth');
+var clientRouter = require('./routes/client');
+var employeRouter = require('./routes/employe');
+var managerRouter = require('./routes/manager');
 
 var app = express();
 app.use(logger('dev'));
@@ -29,6 +32,9 @@ db.once('open', () => {
 });
 
 app.use('/auth', indexRouter);
+app.use('/client', clientRouter);
+app.use('/manager', managerRouter);
+app.use('/employe', employeRouter);
 
 app.listen(PORT, () => {
   console.log(`Serveur en cours d'exécution sur le port ${PORT}`);
