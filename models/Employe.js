@@ -1,11 +1,12 @@
 const mongoose = require('mongoose');
 
 const horaireTravailSchema = new mongoose.Schema({
-  day_of_week: { type: String, required: true },
-  time: [{
-    start_time: { type: String, required: true },
-    end_time: { type: String, required: true }
-  }]
+  jour: { type: String, required: true },
+  temps: [{
+    temps_debut: { type: String, required: true },
+    temps_fin: { type: String, required: true }
+  }],
+  date_creation: { type: Date, required: true }
 });
 
 const employeSchema = new mongoose.Schema({
