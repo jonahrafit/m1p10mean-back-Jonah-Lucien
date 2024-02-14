@@ -11,17 +11,12 @@ async function register(email, nom, prenom, motDePasse, role) {
     try {
         const hashedPassword = await bcrypt.hash(motDePasse, 10);
         const existingUser = await User.findOne({ email });
-        const existingManager = await Manager.findOne({ email });
-        const existingClient = await Client.findOne({ email });
 
-        if (existingUser !== null || existingManager !== null || existingClient !== null) {
+        if (existingUser !== null) {
             throw new Error("L'e-mail existe déjà");
         }
-
-        if (role === 'manager') {
-            const manager = new Manager({ email, nom, prenom });
-            await manager.save();
-        } else if (role === 'employee') {
+        
+        if (role === 'employee') {
             const employe = new Employe({ email, nom, prenom, horaireTravail: 'HT', estValide: false, estConfirme: false, tauxCommission: 0 });
             await sendConfirmationEmail(email, 'employee');
             await employe.save();

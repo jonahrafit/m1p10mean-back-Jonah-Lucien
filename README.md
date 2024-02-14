@@ -4,7 +4,6 @@
 /auth/users         GET                                                     liste users
 
 # Insription
-
 ## role 
     manager
     employee
