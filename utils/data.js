@@ -1,7 +1,9 @@
 const reqAddUser = {
-    email: "jtolojanahary5@gmail.com",
-    motDePasse: "admin",
-    role: "client"
+    "email": "jeanlucien@gmail.com",
+    "nom": "Jean",
+    "prenom": "Lucien",
+    "motDePasse": "admin",
+    "role": "client"
 }
 
 module.exports = {
