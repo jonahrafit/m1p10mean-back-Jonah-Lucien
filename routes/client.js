@@ -13,6 +13,5 @@ router.get( '/:_id', getClientById );
 router.post( '/', createClient );
 router.put( '/:clientId/preferences/employees/:employeeId/:level', addPreferredEmployee );
 router.put( '/:clientId/preferences/services/:serviceId/:level', addPreferredService );
-// router.put( '/', updateClient );
 
 module.exports = router;
