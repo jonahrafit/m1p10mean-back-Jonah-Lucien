@@ -1,10 +1,10 @@
 const mongoose = require( 'mongoose' );
+const {
+    employeSchema
+} = require( './Employe' );
 
 const preferenceEmployeSchema = new mongoose.Schema( {
-    employe: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Employe'
-    },
+    employees: [ employeSchema ],
     niveauEtoile: {
         type: Number,
         min: 0,
@@ -40,8 +40,8 @@ const clientSchema = new mongoose.Schema( {
         required: true,
         unique: true
     },
-    preferenceEmploye: [ preferenceEmployeSchema ],
-    preferenceService: [ preferenceServiceSchema ],
+    preferenceEmployees: [ preferenceEmployeSchema ],
+    preferenceServices: [ preferenceServiceSchema ],
     estConfirme: {
         type: Boolean
     }

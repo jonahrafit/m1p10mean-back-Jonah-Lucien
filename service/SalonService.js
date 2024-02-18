@@ -5,7 +5,7 @@ const {
     pathParamsSchema
 } = require( './validation/SalonServiceValidation' );
 
-function createService( req, res, next ) {
+function createService( req, res ) {
     console.log( "🚀 ~ SalonService ~ createService:", req.body );
     const {
         error,
@@ -20,7 +20,6 @@ function createService( req, res, next ) {
     const service = new ServiceModel( value );
     service.save();
     res.status( 200 ).json( req.body );
-    next();
 }
 
 function getServices( req, res ) {
