@@ -1,4 +1,6 @@
-const Employee = require( '../models/Employe' );
+const {
+    Employee
+} = require( '../models/Employe' );
 const {
     pathParamsSchema
 } = require( './validation/CommonValidation' );
