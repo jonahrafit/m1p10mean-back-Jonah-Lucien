@@ -1,9 +1,9 @@
 // app.js
-var express = require( 'express' );
-var path = require( 'path' );
-var cookieParser = require( 'cookie-parser' );
-var logger = require( 'morgan' );
-var mongoose = require( 'mongoose' );
+const express = require( 'express' );
+const path = require( 'path' );
+const cookieParser = require( 'cookie-parser' );
+const logger = require( 'morgan' );
+const mongoose = require( 'mongoose' );
 require( 'dotenv' ).config();
 
 const PORT = process.env.PORT || 3001;
@@ -22,6 +22,9 @@ app.use( express.urlencoded( {
 } ) );
 app.use( cookieParser() );
 app.use( express.static( path.join( __dirname, 'public' ) ) );
+app.use( ( err, req, res, next ) => {
+  console.log( "🚀 ~ app.use ~ err:", err );
+} )
 
 mongoose.connect( 'mongodb://' +
   process.env.DB_SERVER + ':' +
@@ -35,10 +38,10 @@ db.once( 'open', () => {
 } );
 
 app.use( '/auth', indexRouter );
-app.use( '/client', clientRouter );
+app.use( '/clients', clientRouter );
 app.use( '/manager', managerRouter );
-app.use( '/employe', employeRouter );
-app.use( '/service', serviceRouter );
+app.use( '/employees', employeRouter );
+app.use( '/services', serviceRouter );
 
 app.listen( PORT, () => {
   console.log( `Serveur en cours d'exécution sur le port ${PORT}` );

@@ -1,14 +1,19 @@
-const nodemailer = require('nodemailer');
+const nodemailer = require( 'nodemailer' );
+require( 'dotenv' ).config();
 
-const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-        user: 'jonahrafit@gmail.com',
-        pass: 'vupp bpwz pijf mnod ',
-    },
-});
+async function createTransporter() {
+    const email = process.env.EMAIL;
+    const tokenPassword = process.env.TOKEN_PASSWORD;
+    return nodemailer.createTransport( {
+        service: 'gmail',
+        auth: {
+            user: email,
+            pass: tokenPassword,
+        },
+    } );
+}
 
-async function sendConfirmationEmail(email, str) {
+async function sendConfirmationEmail( email, str ) {
     const mailOptions = {
         from: 'jonahrafit@gmail.com',
         to: email,
@@ -66,8 +71,31 @@ async function sendConfirmationEmail(email, str) {
         </html>
         `,
     };
+    try {
+        const transporter = await createTransporter();
+        await transporter.sendMail( mailOptions );
+    } catch ( error ) {
+        console.error( 'Error sending email:', error.message );
 
-    await transporter.sendMail(mailOptions);
+        // Handle the error based on the error code or message
+        switch ( error.code ) {
+            case 'EAUTH': // Incorrect credentials
+                console.error( 'Invalid email or password' );
+                // Send notification to user or retry with different credentials
+                break;
+            case 'ENOTFOUND': // Server not found
+                console.error( 'Email server not found' );
+                // Retry or use a different service
+                break;
+            default:
+                console.error( 'Unexpected error:', error );
+                // Log the error for debugging
+                break;
+        }
+    }
+
 }
 
-module.exports = { sendConfirmationEmail };
+module.exports = {
+    sendConfirmationEmail
+};

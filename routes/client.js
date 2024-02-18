@@ -1,14 +1,18 @@
-const express = require('express');
+const express = require( 'express' );
 const router = express.Router();
-const { getClient } = require('../service/clientService');
+const {
+  getClients,
+  getClientById,
+  createClient,
+  addPreferredEmployee,
+  addPreferredService
+} = require( '../service/clientService' );
 
-router.get('/', async (req, res) => {
-  try {
-    const response = await getClient();
-    res.status(200).json(response);
-  } catch (error) {
-    res.status(401).json({ error: error.message });
-  }
-});
+router.get( '/:page/:size', getClients );
+router.get( '/:_id', getClientById );
+router.post( '/', createClient );
+router.put( '/:clientId/preferences/employees/:employeeId/:level', addPreferredEmployee );
+router.put( '/:clientId/preferences/services/:serviceId/:level', addPreferredService );
+// router.put( '/', updateClient );
 
 module.exports = router;
