@@ -61,7 +61,58 @@ function getEmployeeById( req, res ) {
 }
 
 
+function addHoraireTraivailEmployee( req, res ) {
+    console.log( "🚀 ~ addHoraireTraivailEmployee ~ req:", req.body );
+
+    Employee.findById( {
+            _id: req.params.employeId
+        } )
+        .then( async employee => {
+            console.log( "🚀 ~ getEmployeeById ~ employee:", employee );
+            employee.horaireTravail.push( {
+                ...req.body,
+                date_creation: new Date()
+            } );
+            const updatedEmployee = await employee.save();
+            console.log( "🚀 ~ addHoraireTraivailEmployee ~ updatedEmployee:", updatedEmployee );
+            return res.status( 200 ).json( updatedEmployee );
+        } )
+        .catch( error => {
+            console.log( "🚀 ~ addHoraireTraivailEmployee ~ error:", error );
+            return res.status( 400 ).json( {
+                error: 'Employee not found'
+            } );
+        } );
+}
+
+function récupérerEmployesAvecPlageHoraireVide( req, res ) {
+    console.log( "🚀 ~ récupérerEmployesAvecPlageHoraireVide ~ retrieveEmployeesWithEmptySchedule:", req.params );
+    const {
+        page,
+        size
+    } = req.params;
+    const skip = ( page - 1 ) * size;
+    Employee.find( {
+            $where: "this.horaireTravail.length == 0"
+        } )
+        .skip( skip )
+        .limit( size )
+        .then( resultat => {
+            console.log( "🚀 ~ récupérerEmployesAvecPlageHoraireVide ~ resultat:", resultat );
+            return res.status( 200 ).json( resultat );
+        } )
+        .catch( error => { // Correction : La fonction catch prend en argument une fonction qui traite l'erreur
+            console.log( "🚀 ~ récupérerEmployesAvecPlageHoraireVide ~ error:", error );
+            return res.status( 500 ).json( {
+                error: 'Internal server error.'
+            } );
+        } );
+}
+
+
 module.exports = {
     getEmployees,
-    getEmployeeById
+    getEmployeeById,
+    addHoraireTraivailEmployee,
+    récupérerEmployesAvecPlageHoraireVide
 };
