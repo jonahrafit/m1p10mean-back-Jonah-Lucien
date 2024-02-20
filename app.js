@@ -13,6 +13,7 @@ const clientRouter = require( './routes/client' );
 const employeRouter = require( './routes/employe' );
 const managerRouter = require( './routes/manager' );
 const serviceRouter = require( './routes/ServiceRouter' );
+const verifyToken = require( './service/midlware/JwtFilter' );
 
 const app = express();
 app.use( logger( 'dev' ) );
@@ -22,9 +23,7 @@ app.use( express.urlencoded( {
 } ) );
 app.use( cookieParser() );
 app.use( express.static( path.join( __dirname, 'public' ) ) );
-app.use( ( err, req, res, next ) => {
-  console.log( "🚀 ~ app.use ~ err:", err );
-} )
+app.use( verifyToken )
 
 mongoose.connect( 'mongodb://' +
   process.env.DB_SERVER + ':' +

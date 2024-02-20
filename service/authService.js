@@ -3,6 +3,7 @@ const bcrypt = require( 'bcrypt' );
 const jwt = require( 'jsonwebtoken' );
 const User = require( '../models/User' );
 const Manager = require( '../models/Manager' );
+require( 'dotenv' ).config();
 const {
     Employee
 } = require( '../models/Employe' );
@@ -77,7 +78,7 @@ async function login( email, motDePasse ) {
         }
 
         if ( user.role === 'employee' ) {
-            const employe = await Employe.findOne( {
+            const employe = await Employee.findOne( {
                 email
             } );
             if ( employe ) {
@@ -99,8 +100,8 @@ async function login( email, motDePasse ) {
         const token = jwt.sign( {
             email: user.email,
             role: user.role
-        }, 'your-secret-key', {
-            expiresIn: '2h'
+        }, process.env.SECRET_KEY, {
+            expiresIn: process.env.TOKEN_PERIOD
         } );
         return {
             token
@@ -115,7 +116,7 @@ async function login( email, motDePasse ) {
 async function confirmCompte( email, str ) {
     try {
         if ( str === 'employee' ) {
-            const employe = await Employe.findOne( {
+            const employe = await Employee.findOne( {
                 email
             } );
             if ( !employe ) {
