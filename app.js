@@ -8,22 +8,22 @@ require('dotenv').config();
 
 const PORT = process.env.PORT || 3001;
 
-const indexRouter = require( './routes/auth' );
-const clientRouter = require( './routes/client' );
-const employeRouter = require( './routes/employe' );
-const managerRouter = require( './routes/manager' );
-const serviceRouter = require( './routes/ServiceRouter' );
-const verifyToken = require( './service/midlware/JwtFilter' );
+const indexRouter = require('./routes/auth');
+const clientRouter = require('./routes/client');
+const employeRouter = require('./routes/employe');
+const managerRouter = require('./routes/manager');
+const serviceRouter = require('./routes/ServiceRouter');
+const verifyToken = require('./service/midlware/JwtFilter');
 
 const app = express();
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({
   extended: false
-} ) );
-app.use( cookieParser() );
-app.use( express.static( path.join( __dirname, 'public' ) ) );
-app.use( verifyToken )
+}));
+app.use(cookieParser());
+app.use(express.static(path.join(__dirname, 'public')));
+//  app.use(verifyToken)
 
 mongoose.connect('mongodb://' +
   process.env.DB_SERVER + ':' +
