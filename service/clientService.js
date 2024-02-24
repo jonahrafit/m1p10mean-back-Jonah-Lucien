@@ -1,11 +1,15 @@
-const Client = require( '../models/Client' );
+const {
+    Client
+} = require( '../models/Client' );
 const {
     Employee
 } = require( '../models/Employe' );
 const {
     pathParamsSchema
 } = require( './validation/CommonValidation' );
-const Service = require( '../models/Service' );
+const {
+    Service
+} = require( '../models/Service' );
 
 
 function getClients( req, res ) {
@@ -80,13 +84,14 @@ async function addPreferredService( req, res ) {
             } );
         }
         // Fetch the client by ID
-        const client = await Client.findById( clientId );
+        const client = await Client.findById( clientId ).populate( 'preferenceServices.service' );
         if ( !client ) {
             console.log( "🚀 ~ addPreferredService ~ Client not found" );
             return res.status( 404 ).json( {
                 error: 'Client not found'
             } );
         }
+        console.log( "🚀 ~ addPreferredService ~ service:", service );
         client.preferenceServices.push( {
             service,
             niveauEtoile: level
@@ -139,7 +144,7 @@ async function addPreferredEmployee( req, res ) {
 
         // Add employee to client's preferred list with level
         client.preferenceEmployees.push( {
-            employees: employee,
+            employee,
             niveauEtoile: level
         } );
 

@@ -2,7 +2,9 @@
 const bcrypt = require( 'bcrypt' );
 const jwt = require( 'jsonwebtoken' );
 const User = require( '../models/User' );
-const Manager = require( '../models/Manager' );
+const {
+    Manager
+} = require( '../models/Manager' );
 require( 'dotenv' ).config();
 const {
     Employee
@@ -10,7 +12,9 @@ const {
 const {
     sendConfirmationEmail
 } = require( './mailService' );
-const Client = require( '../models/Client' );
+const {
+    Client
+} = require( '../models/Client' );
 
 async function register( email, nom, prenom, motDePasse, role ) {
     try {

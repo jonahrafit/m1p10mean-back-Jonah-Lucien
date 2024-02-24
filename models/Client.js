@@ -2,9 +2,12 @@ const mongoose = require( 'mongoose' );
 const {
     employeSchema
 } = require( './Employe' );
+const {
+    serviceSchema
+} = require( './Service' );
 
 const preferenceEmployeSchema = new mongoose.Schema( {
-    employees: [ employeSchema ],
+    employee: employeSchema,
     niveauEtoile: {
         type: Number,
         min: 0,
@@ -14,10 +17,7 @@ const preferenceEmployeSchema = new mongoose.Schema( {
 } );
 
 const preferenceServiceSchema = new mongoose.Schema( {
-    service: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Service'
-    },
+    service: serviceSchema,
     niveauEtoile: {
         type: Number,
         min: 0,
@@ -37,8 +37,7 @@ const clientSchema = new mongoose.Schema( {
     },
     email: {
         type: String,
-        required: true,
-        unique: true
+        required: true
     },
     preferenceEmployees: [ preferenceEmployeSchema ],
     preferenceServices: [ preferenceServiceSchema ],
@@ -47,5 +46,9 @@ const clientSchema = new mongoose.Schema( {
     }
 } );
 
+
 const Client = mongoose.model( 'Client', clientSchema );
-module.exports = Client;
+module.exports = {
+    Client,
+    clientSchema,
+};

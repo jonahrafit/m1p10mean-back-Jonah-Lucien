@@ -13,6 +13,7 @@ const clientRouter = require( './routes/client' );
 const employeRouter = require( './routes/employe' );
 const managerRouter = require( './routes/manager' );
 const serviceRouter = require( './routes/ServiceRouter' );
+const rendezVousRouter = require( './routes/rendezVousRouter' );
 const verifyToken = require( './service/midlware/JwtFilter' );
 
 const app = express();
@@ -41,6 +42,7 @@ app.use( '/clients', clientRouter );
 app.use( '/manager', managerRouter );
 app.use( '/employees', employeRouter );
 app.use( '/services', serviceRouter );
+app.use( '/rendez-vous', rendezVousRouter );
 
 app.listen( PORT, () => {
   console.log( `Serveur en cours d'exécution sur le port ${PORT}` );
