@@ -109,10 +109,29 @@ function récupérerEmployesAvecPlageHoraireVide( req, res ) {
         } );
 }
 
+function updateEmployee( req, res ) {
+    Employee.findByIdAndUpdate( {
+            _id: req.params.id
+        }, req.body, {
+            new: true
+        } )
+        .then( updated => {
+            console.log( "🚀 ~ updateEmployee ~ updated:", updated );
+            return res.status( 200 ).json( updated );
+        } )
+        .catch( error => {
+            console.log( "🚀 ~ updateEmployee ~ error:", error );
+            return res.status( 500 ).json( {
+                error: 'Internal server error'
+            } );
+        } )
+}
+
 
 module.exports = {
     getEmployees,
     getEmployeeById,
     addHoraireTraivailEmployee,
-    récupérerEmployesAvecPlageHoraireVide
+    récupérerEmployesAvecPlageHoraireVide,
+    updateEmployee
 };
