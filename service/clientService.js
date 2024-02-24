@@ -91,16 +91,21 @@ async function addPreferredService( req, res ) {
                 error: 'Client not found'
             } );
         }
-        console.log( "🚀 ~ addPreferredService ~ service:", service );
-        client.preferenceServices.push( {
-            service,
-            niveauEtoile: level
-        } );
-        // Save the updated client
-        const updatedClient = await client.save();
+        if ( !isServiceInClientPreferList( client, service ) ) {
+            console.log( "🚀 ~ addPreferredService ~ service:", service );
+            client.preferenceServices.push( {
+                service,
+                niveauEtoile: level
+            } );
+            // Save the updated client
+            const updatedClient = await client.save();
 
-        console.log( "🚀 ~ addPreferredService ~ Preferred service added successfully" );
-        return res.status( 200 ).json( updatedClient );
+            console.log( "🚀 ~ addPreferredService ~ Preferred service added successfully" );
+            return res.status( 200 ).json( updatedClient );
+        }
+        return res.status( 200 ).json( {
+            message: 'Ce service est déjà inclus dans la liste de préférences.'
+        } );
     } catch ( error ) {
         console.log( "🚀 ~ addPreferredService ~ Error:", error );
         return res.status( 500 ).json( {
@@ -143,16 +148,22 @@ async function addPreferredEmployee( req, res ) {
         }
 
         // Add employee to client's preferred list with level
-        client.preferenceEmployees.push( {
-            employee,
-            niveauEtoile: level
+        if ( !isEmployeeInClientPreferList( client, employee ) ) {
+            client.preferenceEmployees.push( {
+                employee,
+                niveauEtoile: level
+            } );
+            // Save the updated client
+            const updatedClient = await client.save();
+            console.log( "🚀 ~ addPreferredEmployee ~ Preferred employee added successfully" );
+            return res.status( 200 ).json( updatedClient );
+        }
+        return res.status( 200 ).json( {
+            message: 'L\'employé est déjà présent dans la liste de préférences'
         } );
 
-        // Save the updated client
-        const updatedClient = await client.save();
 
-        console.log( "🚀 ~ addPreferredEmployee ~ Preferred employee added successfully" );
-        return res.status( 200 ).json( updatedClient );
+
     } catch ( error ) {
         console.log( "🚀 ~ addPreferredEmployee ~ Error:", error );
         return res.status( 500 ).json( {
@@ -160,6 +171,25 @@ async function addPreferredEmployee( req, res ) {
         } );
     }
 }
+
+function isEmployeeInClientPreferList( client, employee ) {
+    for ( const employeePrefer of client.preferenceEmployees ) {
+        if ( employeePrefer.employee.email === employee.email ) {
+            return true;
+        }
+    }
+    return false;
+}
+
+function isServiceInClientPreferList( client, service ) {
+    for ( const servPrefer of client.preferenceServices ) {
+        if ( servPrefer.service._id.equals( service._id ) ) {
+            return true;
+        }
+    }
+    return false;
+}
+
 
 function createClient( req, res ) {
     console.log( "🚀 ~ ClientService ~ creatClient:", req.body );
