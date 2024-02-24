@@ -1,14 +1,11 @@
 const mongoose = require( 'mongoose' );
-const {
-  serviceSchema
-} = require( './Service' );
 
-const horaireTravailSchema = new mongoose.Schema( {
+const horaireTravailSchema = new mongoose.Schema({
   jour: {
     type: String,
     required: true
   },
-  temps: [ {
+  temps: [{
     temps_debut: {
       type: Number,
       required: true
@@ -17,14 +14,14 @@ const horaireTravailSchema = new mongoose.Schema( {
       type: Number,
       required: true
     }
-  } ],
+  }],
   date_creation: {
     type: Date,
     required: true
   }
-} );
+});
 
-const employeSchema = new mongoose.Schema( {
+const employeSchema = new mongoose.Schema({
   nom: {
     type: String,
     required: true
@@ -38,7 +35,6 @@ const employeSchema = new mongoose.Schema( {
     required: true
   },
   horaireTravail: [ horaireTravailSchema ],
-  serviceOccupe: [ serviceSchema ],
   estValide: {
     type: Boolean,
     default: false
@@ -51,9 +47,9 @@ const employeSchema = new mongoose.Schema( {
     type: Number,
     required: true
   }
-} );
+});
 
-const Employee = mongoose.model( 'Employe', employeSchema );
+const Employee = mongoose.model('Employe', employeSchema);
 module.exports = {
   Employee,
   employeSchema
