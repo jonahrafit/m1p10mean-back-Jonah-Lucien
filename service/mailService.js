@@ -96,6 +96,95 @@ async function sendConfirmationEmail( email, str ) {
 
 }
 
+async function sendNofiticationEmail( email, nomClient, frontLink ) {
+    console.log( "🚀 ~ sendNofiticationEmail ~  email, nomClient, frontLink:", email, nomClient, frontLink );
+    const mailOptions = {
+        from: 'jonahrafit@gmail.com',
+        to: email,
+        subject: 'Offre special',
+        html: `
+        < !DOCTYPE html >
+            <html lang = "en" >
+            <head >
+            <meta charset = "UTF-8" >
+            <meta name = "viewport"content = "width=device-width, initial-scale=1.0" >
+            <title > Promotion Publiée < /title>
+            <style >
+                body {
+                    font - family: Arial, sans - serif;
+                    margin: 0;
+                    padding: 0;
+                    background - color: #f5f5f5;
+                }
+                .container {
+                    max - width: 600 px;
+                    margin: 20 px auto;
+                    background - color: #fff;
+                    padding: 20 px;
+                    border - radius: 8 px;
+                    box - shadow: 0 0 10 px rgba( 0, 0, 0, 0.1 );
+                }
+                h1 {
+                    color: #333;
+                    text-align: center;
+                }
+                p {
+                    color: # 666;
+                    font - size: 16 px;
+                    line - height: 1.6;
+                    margin - bottom: 20 px;
+                }
+                .btn {
+                    display: inline - block;
+                    background - color: #007bff;
+                    color: # fff;
+                    text - decoration: none;
+                    padding: 10 px 20 px;
+                    border - radius: 5 px;
+                    transition: background - color 0.3 s;
+                }
+                .btn: hover {
+                        background - color: #0056b3;
+                }
+            </style>
+        </head>
+        <body>
+            <div class= "container" >
+                < h1 > Promotion Publiée! < /h1>
+                < p > Bonjour ${nomClient}, < /p>
+                <p > Nous sommes heureux de vous informer qu 'une nouvelle promotion a été publiée.</p>
+                < p > Consultez nos offres spéciales dès maintenant! < /p> <a href = "${frontLink}" class = "btn" > Voir les promotions < /a >
+            </div>
+        </body>
+    </html>
+            `,
+    };
+    try {
+        const transporter = await createTransporter();
+        await transporter.sendMail( mailOptions );
+    } catch ( error ) {
+        console.error( 'Error sending email:', error.message );
+
+        // Handle the error based on the error code or message
+        switch ( error.code ) {
+            case 'EAUTH': // Incorrect credentials
+                console.error( 'Invalid email or password' );
+                // Send notification to user or retry with different credentials
+                break;
+            case 'ENOTFOUND': // Server not found
+                console.error( 'Email server not found' );
+                // Retry or use a different service
+                break;
+            default:
+                console.error( 'Unexpected error:', error );
+                // Log the error for debugging
+                break;
+        }
+    }
+
+}
+
 module.exports = {
-    sendConfirmationEmail
+    sendConfirmationEmail,
+    sendNofiticationEmail
 };

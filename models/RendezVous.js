@@ -17,14 +17,6 @@ const rendezVousSchema = new mongoose.Schema( {
     type: Date,
     required: true
   },
-  mois: {
-    type: Number,
-    required: true
-  },
-  annee: {
-    type: Number,
-    required: true
-  },
   date_rendez_vous: {
     type: Date,
     required: true
