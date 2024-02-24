@@ -60,14 +60,10 @@ async function setRendezVousClientWithEmployee( req, res ) {
 
         // Sauvegarder un nouveau rendez-vous dans la base de données
         const dateRendezVous = new Date( req.body.dateRendezVous );
-        const month = dateRendezVous.getMonth();
-        const year = dateRendezVous.getFullYear();
         const rendezVous = new RendezVous( {
             client: clientById,
             employee: employeeById,
             date_created: new Date(),
-            mois: month,
-            annee: year,
             date_rendez_vous: dateRendezVous,
             services: serviceResult,
             fait: false
@@ -111,8 +107,8 @@ async function updateRendezVous( req, res ) {
     } = req.params;
     const rendezVous = await RendezVous.findByIdAndUpdate( {
         _id: id
-    }, {
-        fait: true
+    }, req.body, {
+        new: true
     } );
     if ( !rendezVous ) {
         return res.status( 400 ).json( {
