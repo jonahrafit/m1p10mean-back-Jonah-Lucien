@@ -23,7 +23,7 @@ app.use( express.urlencoded( {
 } ) );
 app.use( cookieParser() );
 app.use( express.static( path.join( __dirname, 'public' ) ) );
-app.use( verifyToken )
+// app.use( verifyToken )
 
 mongoose.connect( 'mongodb://' +
   process.env.DB_SERVER + ':' +

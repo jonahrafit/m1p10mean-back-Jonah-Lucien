@@ -62,6 +62,8 @@ async function register( email, nom, prenom, motDePasse, role ) {
 }
 
 async function login( email, motDePasse ) {
+    console.log( "🚀 ~ login ~ motDePasse:", motDePasse );
+    console.log( "🚀 ~ login ~ email:", email );
     try {
         const user = await User.findOne( {
             email
@@ -104,7 +106,8 @@ async function login( email, motDePasse ) {
             expiresIn: process.env.TOKEN_PERIOD
         } );
         return {
-            token
+            token,
+            email
         };
 
     } catch ( error ) {
