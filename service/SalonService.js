@@ -1,4 +1,6 @@
-const ServiceModel = require( '../models/Service' );
+const {
+    ServiceModel
+} = require( '../models/Service' );
 const {
     PostServiceSchema,
     PutServiceSchema,
