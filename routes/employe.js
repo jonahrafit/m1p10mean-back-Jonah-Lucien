@@ -4,12 +4,14 @@ const {
   getEmployees,
   getEmployeeById,
   addHoraireTraivailEmployee,
-  récupérerEmployesAvecPlageHoraireVide
+  récupérerEmployesAvecPlageHoraireVide,
+  updateEmployee
 } = require( '../service/employeService' );
 
 router.get( '/:page/:size', getEmployees );
 router.get( '/:_id', getEmployeeById );
 router.put( '/horaire-travail/:employeId', addHoraireTraivailEmployee );
 router.get( '/horaire-vide/:page/:size', récupérerEmployesAvecPlageHoraireVide );
+router.put( '/:id', updateEmployee );
 
 module.exports = router;
