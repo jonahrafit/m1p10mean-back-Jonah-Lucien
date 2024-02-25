@@ -45,11 +45,22 @@ function getServices( req, res ) {
         .limit( size )
         .then( result => {
             console.log( "🚀 ~ getServices ~ result:", result );
-            return res.json( {
-                page: page,
-                size: size,
-                services: result
-            } );
+            Service.countDocuments( {} )
+                .then( count => {
+                    console.log( "Total count:", count );
+                    return res.json( {
+                        page: page,
+                        size: size,
+                        total: count,
+                        services: result
+                    } );
+                } )
+                .catch( err => {
+                    console.error( "Error fetching services:", err );
+                    return res.status( 500 ).json( {
+                        error: "Internal Server Error"
+                    } );
+                } );
         } )
         .catch( error => {
             console.log( "🚀 ~ getServices ~ error fetching services:", error );
@@ -58,6 +69,7 @@ function getServices( req, res ) {
             } );
         } )
 }
+
 
 async function updateService( req, res ) {
     console.log( "🚀 ~ SalonService ~ updateService:", req );
