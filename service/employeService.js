@@ -1,27 +1,17 @@
 const {
     Employee
 } = require( '../models/Employe' );
+
 const {
-    pathParamsSchema
-} = require( './validation/CommonValidation' );
-
-
+    Service
+} = require( '../models/Service' );
 
 function getEmployees( req, res ) {
     console.log( "🚀 ~ EmployeeService ~ getEmployees:", req.params );
     const {
-        error,
-        value
-    } = pathParamsSchema.validate( req.params );
-    if ( error ) {
-        return res.status( 400 ).json( {
-            error: error.details[ 0 ].message
-        } );
-    }
-    const {
         page,
         size
-    } = value;
+    } = req.params;
     const skip = ( page - 1 ) * size;
     Employee.find( {} )
         .skip( skip )
@@ -127,11 +117,86 @@ function updateEmployee( req, res ) {
         } )
 }
 
+function addServiceToEmployee( req, res ) {
+    const {
+        employeeId,
+        serviceId
+    } = req.params;
+    Employee.findById( {
+            _id: employeeId
+        } )
+        .then( employee => {
+            console.log( "🚀 ~ addServiceToEmployee ~ employee:", employee );
+            Service.findById( {
+                    _id: serviceId
+                } )
+                .then( async service => {
+                    employee.serviceOccupe.push( service );
+                    const updatedEmployee = await employee.save();
+                    console.log( "🚀 ~ addServiceToEmployee ~ updatedEmployee:", updatedEmployee );
+                    return res.status( 200 ).json( {
+                        message: true,
+                        updatedEmployee
+                    } );
+                } )
+                .catch( error => {
+                    return res.status( 400 ).json( {
+                        error: 'Service non trouve'
+                    } );
+                } )
+
+        } )
+        .catch( error => {
+            console.log( "🚀 ~ addServiceToEmployee ~ error:", error );
+            return res.status( 400 ).json( {
+                error: 'Employee not found'
+            } );
+        } );
+}
+async function getEmployeesHasService( req, res ) {
+    const {
+        serviceId
+    } = req.params;
+
+    try {
+        const employees = await Employee.aggregate( [ {
+                $match: {
+                    "serviceOccupe._id": serviceId
+                }
+            },
+            {
+                $addFields: {
+                    matchedServiceOccupe: {
+                        $filter: {
+                            input: "$serviceOccupe",
+                            as: "service",
+                            cond: {
+                                $eq: [ "$$service._id", serviceId ]
+                            }
+                        }
+                    }
+                }
+            }
+        ] );
+
+        console.log( "Employees:", employees );
+        res.json( employees );
+    } catch ( err ) {
+        console.error( "Error:", err );
+        res.status( 500 ).json( {
+            error: "Internal Server Error"
+        } );
+    }
+}
+
+
 
 module.exports = {
     getEmployees,
     getEmployeeById,
     addHoraireTraivailEmployee,
     récupérerEmployesAvecPlageHoraireVide,
-    updateEmployee
+    updateEmployee,
+    addServiceToEmployee,
+    getEmployeesHasService
 };

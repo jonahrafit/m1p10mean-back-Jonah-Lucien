@@ -1,4 +1,7 @@
 const mongoose = require( 'mongoose' );
+const {
+  serviceSchema
+} = require( './Service' );
 
 const horaireTravailSchema = new mongoose.Schema( {
   jour: {
@@ -35,6 +38,7 @@ const employeSchema = new mongoose.Schema( {
     required: true
   },
   horaireTravail: [ horaireTravailSchema ],
+  serviceOccupe: [ serviceSchema ],
   estValide: {
     type: Boolean,
     default: false
