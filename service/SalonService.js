@@ -1,5 +1,5 @@
 const {
-    ServiceModel
+    Service
 } = require( '../models/Service' );
 const {
     PostServiceSchema,
@@ -19,7 +19,7 @@ function createService( req, res ) {
             error: error.details[ 0 ].message
         } );
     }
-    const service = new ServiceModel( value );
+    const service = new Service( value );
     service.save();
     res.status( 200 ).json( req.body );
 }
@@ -40,7 +40,7 @@ function getServices( req, res ) {
         size
     } = value;
     const skip = ( page - 1 ) * size;
-    ServiceModel.find( {} )
+    Service.find( {} )
         .skip( skip )
         .limit( size )
         .then( result => {
@@ -59,7 +59,7 @@ function getServices( req, res ) {
         } )
 }
 
-function updateService( req, res ) {
+async function updateService( req, res ) {
     console.log( "🚀 ~ SalonService ~ updateService:", req );
     const {
         error,
@@ -73,23 +73,24 @@ function updateService( req, res ) {
     }
     console.log( "🚀 ~ updateService ~ value:", value );
     console.log( "🚀 ~ updateService ~ id:", req.params );
-    ServiceModel.findByIdAndUpdate( req.params.id, value )
-        .then( updated => {
-            console.log( "🚀 ~ updateService ~ updated:", updated );
-            return res.status( 200 ).json( updated );
-        } )
-        .catch( error => {
-            console.log( "🚀 ~ updateService ~ error:", error );
-            return res.status( 500 ).json( {
-                error: 'Internal server error'
-            } );
-        } )
+    const service = await Service.findByIdAndUpdate( {
+        _id: req.params.id
+    }, value, {
+        new: true
+    } );
+    if ( !service ) {
+        return res.status( 400 ).json( {
+            error: 'Service non trouve'
+        } );
+    }
+    console.log( "🚀 ~ updateService ~ updated:", service );
+    return res.status( 200 ).json( service );
 }
 
 function deleteService( req, res ) {
     console.log( "🚀 ~ SalonService ~ deleteService:", req );
     const id = req.params.id;
-    ServiceModel.findByIdAndDelete( id )
+    Service.findByIdAndDelete( id )
         .then( deleted => {
             console.log( "🚀 ~ deleteService ~ resultat:", deleted );
             if ( !deleted ) return res.status( 404 ).json( {
