@@ -6,6 +6,8 @@ const {
     Service
 } = require( '../models/Service' );
 
+const mongoose = require( 'mongoose' );
+
 function getEmployees( req, res ) {
     console.log( "🚀 ~ EmployeeService ~ getEmployees:", req.params );
     const {
@@ -17,12 +19,23 @@ function getEmployees( req, res ) {
         .skip( skip )
         .limit( size )
         .then( result => {
-            console.log( "🚀 ~ EmployeeService ~ result:", result )
-            return res.json( {
-                page: page,
-                size: size,
-                employees: result
-            } );
+            Employee.countDocuments( {} )
+                .then( count => {
+                    console.log( "🚀 ~ EmployeeService ~ result:", result )
+                    return res.json( {
+                        page: page,
+                        size: size,
+                        total: count,
+                        employees: result
+                    } );
+                } )
+                .catch( error => {
+                    console.log( "🚀 ~ getEmployees ~ error fetching employees:", error );
+                    return res.status( 500 ).json( {
+                        error: 'Internal server error'
+                    } );
+                } )
+
         } )
         .catch( error => {
             console.log( "🚀 ~ getEmployees ~ error fetching employees:", error );
@@ -88,8 +101,28 @@ function récupérerEmployesAvecPlageHoraireVide( req, res ) {
         .skip( skip )
         .limit( size )
         .then( resultat => {
-            console.log( "🚀 ~ récupérerEmployesAvecPlageHoraireVide ~ resultat:", resultat );
-            return res.status( 200 ).json( resultat );
+            Employee.countDocuments( {
+                    horaireTravail: {
+                        $exists: true,
+                        $eq: []
+                    }
+                } )
+                .then( count => {
+                    console.log( "🚀 ~ récupérerEmployesAvecPlageHoraireVide ~ resultat:", resultat );
+                    return res.status( 200 ).json( {
+                        page,
+                        size,
+                        total: count,
+                        resultat
+                    } );
+                } )
+                .catch( error => {
+                    console.log( "🚀 ~ récupérerEmployesAvecPlageHoraireVide ~ error:", error );
+                    return res.status( 500 ).json( {
+                        error: "Internal Server Error"
+                    } );
+                } )
+
         } )
         .catch( error => { // Correction : La fonction catch prend en argument une fonction qui traite l'erreur
             console.log( "🚀 ~ récupérerEmployesAvecPlageHoraireVide ~ error:", error );
@@ -153,6 +186,7 @@ function addServiceToEmployee( req, res ) {
             } );
         } );
 }
+
 async function getEmployeesHasService( req, res ) {
     const {
         serviceId
@@ -160,24 +194,14 @@ async function getEmployeesHasService( req, res ) {
 
     try {
         const employees = await Employee.aggregate( [ {
-                $match: {
-                    "serviceOccupe._id": serviceId
-                }
-            },
-            {
-                $addFields: {
-                    matchedServiceOccupe: {
-                        $filter: {
-                            input: "$serviceOccupe",
-                            as: "service",
-                            cond: {
-                                $eq: [ "$$service._id", serviceId ]
-                            }
-                        }
+            $match: {
+                "serviceOccupe": {
+                    $elemMatch: {
+                        "_id": new mongoose.Types.ObjectId( serviceId )
                     }
                 }
             }
-        ] );
+        } ] );
 
         console.log( "Employees:", employees );
         res.json( employees );
