@@ -189,22 +189,50 @@ function addServiceToEmployee( req, res ) {
 
 async function getEmployeesHasService( req, res ) {
     const {
-        serviceId
+        serviceId,
+        page,
+        size
     } = req.params;
-
+    const skip = ( page - 1 ) * size;
     try {
-        const employees = await Employee.aggregate( [ {
-            $match: {
-                "serviceOccupe": {
-                    $elemMatch: {
-                        "_id": new mongoose.Types.ObjectId( serviceId )
+        Employee.aggregate( [ {
+                $match: {
+                    "serviceOccupe": {
+                        $elemMatch: {
+                            "_id": new mongoose.Types.ObjectId( serviceId )
+                        }
                     }
                 }
-            }
-        } ] );
+            } ] )
+            .skip( parseInt( skip ) )
+            .limit( parseInt( size ) )
+            .then( async employees => {
+                const count = await Employee.aggregate( [ {
+                        $match: {
+                            "serviceOccupe": {
+                                $elemMatch: {
+                                    "_id": new mongoose.Types.ObjectId( serviceId )
+                                }
+                            }
+                        }
+                    },
+                    {
+                        $count: "employeeCount"
+                    }
+                ] );
+                console.log( "Employees:", employees );
+                return res.status( 200 ).json( {
+                    page,
+                    size,
+                    total: count[ 0 ] ? count[ 0 ].employeeCount : 0,
+                    employees
+                } );
+            } )
+            .catch( error => {
+                console.log( "🚀 ~ getEmployeesHasService ~ error:", error );
+            } )
 
-        console.log( "Employees:", employees );
-        res.json( employees );
+
     } catch ( err ) {
         console.error( "Error:", err );
         res.status( 500 ).json( {
