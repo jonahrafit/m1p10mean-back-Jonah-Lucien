@@ -13,7 +13,7 @@ const {
 router.get( '/:page/:size', getEmployees );
 router.get( '/:_id', getEmployeeById );
 router.get( '/horaire-vide/:page/:size', récupérerEmployesAvecPlageHoraireVide );
-router.get( '/avec/services/by-id/:serviceId', getEmployeesHasService );
+router.get( '/avec/services/by-id/:serviceId/:page/:size', getEmployeesHasService );
 router.put( '/horaire-travail/:employeId', addHoraireTraivailEmployee );
 router.put( '/:id', updateEmployee );
 router.put( '/:employeeId/service/:serviceId', addServiceToEmployee );
