@@ -5,7 +5,9 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const mongoose = require('mongoose');
 require('dotenv').config();
+const cors = require('cors');
 
+// Autoriser tous les domaines à accéder à la ressource
 const PORT = process.env.PORT || 3001;
 
 const indexRouter = require('./routes/auth');
@@ -13,6 +15,7 @@ const clientRouter = require('./routes/client');
 const employeRouter = require('./routes/employe');
 const managerRouter = require('./routes/manager');
 const serviceRouter = require('./routes/ServiceRouter');
+const rendezVousRouter = require('./routes/rendezVousRouter');
 const verifyToken = require('./service/midlware/JwtFilter');
 
 const app = express();
@@ -23,6 +26,7 @@ app.use(express.urlencoded({
 }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(cors());
 //  app.use(verifyToken)
 
 mongoose.connect('mongodb://' +
@@ -36,11 +40,12 @@ db.once('open', () => {
   console.log('Connecté à la base de données MongoDB');
 });
 
-app.use( '/auth', indexRouter );
-app.use( '/clients', clientRouter );
-app.use( '/manager', managerRouter );
-app.use( '/employees', employeRouter );
-app.use( '/services', serviceRouter );
+app.use('/auth', indexRouter);
+app.use('/clients', clientRouter);
+app.use('/manager', managerRouter);
+app.use('/employees', employeRouter);
+app.use('/services', serviceRouter);
+app.use('/rendez-vous', rendezVousRouter);
 
 app.listen(PORT, () => {
   console.log(`Serveur en cours d'exécution sur le port ${PORT}`);
