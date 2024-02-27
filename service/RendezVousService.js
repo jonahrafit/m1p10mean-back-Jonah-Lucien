@@ -168,7 +168,6 @@ async function getRendezVousByEmploye(req, res) {
     }
 }
 
-
 function isEmployeeInClientPreferList(client, employee) {
     for (const employeePrefer of client.preferenceEmployees) {
         if (employeePrefer.employee.email === employee.email) {
@@ -186,7 +185,6 @@ function isServiceInClientPreferList(client, service) {
     }
     return false;
 }
-
 
 module.exports = {
     setRendezVousClientWithEmployee,

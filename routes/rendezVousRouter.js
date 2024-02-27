@@ -12,10 +12,10 @@ const {
 
 // SET AN APPOINTMENT FOR A CLIENT WITH HIS PREFER EMPLOYEE
 router.post('/:clientId/:serviceId/:employeeId', setRendezVousClientWithEmployee);
-router.get('/:page/:size', getRendezVous);
 router.put('/:id', updateRendezVous);
 router.delete('/:id', deleteRendezVous);
-router.get('/employee/:employeId/:debut/:fin', getRendezVousByEmployeBetweenDate);
-router.get('/employee/:employeId', getRendezVousByEmployeID);
+router.get('/:page/:size', getRendezVous);
+router.get('/employee/:employeId/:debut/:fin', getRendezVousByEmployeBetweenDate); // Route spécifique en premier
+router.get('/employee/:employeId', getRendezVousByEmployeID); // Route générale après
 
 module.exports = router;
