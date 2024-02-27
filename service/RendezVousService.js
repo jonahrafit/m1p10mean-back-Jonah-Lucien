@@ -131,6 +131,58 @@ async function deleteRendezVous( req, res ) {
     return res.status( 200 ).json( rendezVousDeleted );
 }
 
+async function getRendezVousByEmployeBetweenDate( req, res ) {
+    try {
+        const {
+            employeId,
+            debut,
+            fin
+        } = req.params;
+
+        const rendezVous = await RendezVous.find( {
+            'employee._id': employeId,
+            date_rendez_vous: {
+                $gte: moment( debut ).startOf( 'day' ).toDate(),
+                $lte: moment( fin ).endOf( 'day' ).toDate()
+            }
+        } );
+
+        res.json( {
+            rendezVous
+        } );
+    } catch ( error ) {
+        console.error( error );
+        res.status( 500 ).json( {
+            message: 'Une erreur est survenue lors de la récupération des rendez-vous.'
+        } );
+    }
+}
+
+async function getRendezVousByEmploye( req, res ) {
+    try {
+        const {
+            employeId
+        } = req.params;
+
+
+        let query = {
+            'employee._id': employeId
+        };
+
+        const rendezVous = await RendezVous.find( query );
+
+        return res.status( 200 ).json( {
+            rendezVous
+        } );
+    } catch ( error ) {
+        console.error( error );
+        res.status( 500 ).json( {
+            message: 'Une erreur est survenue lors de la récupération des rendez-vous.'
+        } );
+    }
+}
+
+
 function isEmployeeInClientPreferList( client, employee ) {
     for ( const employeePrefer of client.preferenceEmployees ) {
         if ( employeePrefer.employee.email === employee.email ) {
@@ -154,5 +206,7 @@ module.exports = {
     setRendezVousClientWithEmployee,
     getRendezVous,
     updateRendezVous,
-    deleteRendezVous
+    deleteRendezVous,
+    getRendezVousByEmployeBetweenDate,
+    getRendezVousByEmploye
 };
