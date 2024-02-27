@@ -13,7 +13,6 @@ const {
 } = require( '../models/Service' );
 const moment = require( 'moment' );
 
-
 async function setRendezVousClientWithEmployee( req, res ) {
     try {
         const {
@@ -99,6 +98,9 @@ async function getRendezVous( req, res ) {
             rendezVous: []
         } );
     }
+    const date = moment( rendezVous.date_rendez_vous );
+    const formattedDate = date.format( 'YYYY-MM-DDTHH:mm:ss.SSSZ' ).replace( date.utcOffset().toString(), '+00:00' );
+    console.log( "🚀 ~ getRendezVous ~ formattedDate:", formattedDate );
     return res.status( 200 ).json( {
         rendezVous
     } );
