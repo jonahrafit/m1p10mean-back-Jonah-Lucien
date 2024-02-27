@@ -10,8 +10,13 @@ const {
 } = require('../models/Employe');
 const {
     Service
+<<<<<<< HEAD
 } = require('../models/Service');
 const moment = require('moment');
+=======
+} = require( '../models/Service' );
+const moment = require( 'moment' );
+>>>>>>> ec138b4 (Integration moment.js)
 
 
 async function setRendezVousClientWithEmployee(req, res) {
@@ -61,12 +66,19 @@ async function setRendezVousClientWithEmployee(req, res) {
         }
 
         // Sauvegarder un nouveau rendez-vous dans la base de données
+<<<<<<< HEAD
         const dateRendezVous = new Date(req.body.dateRendezVous);
         const rendezVous = new RendezVous({
+=======
+        const dateRendezVous = new Date( req.body.dateRendezVous );
+        const formattedDate = moment().utc( dateRendezVous, 'yyyy - mm - dd hh: mm: ss' );
+        console.log( "🚀 ~ setRendezVousClientWithEmployee ~ formattedDate:", formattedDate.isUTC() );
+        const rendezVous = new RendezVous( {
+>>>>>>> ec138b4 (Integration moment.js)
             client: clientById,
             employee: employeeById,
             date_created: new Date(),
-            date_rendez_vous: dateRendezVous,
+            date_rendez_vous: formattedDate,
             services: serviceResult,
             fait: false
         });
@@ -97,7 +109,14 @@ async function getRendezVous(req, res) {
             rendezVous: []
         });
     }
+<<<<<<< HEAD
     return res.status(200).json({
+=======
+    const date = moment( rendezVous.date_rendez_vous );
+    const formattedDate = date.format( 'YYYY-MM-DDTHH:mm:ss.SSSZ' ).replace( date.utcOffset().toString(), '+00:00' );
+    console.log( "🚀 ~ getRendezVous ~ formattedDate:", formattedDate );
+    return res.status( 200 ).json( {
+>>>>>>> ec138b4 (Integration moment.js)
         rendezVous
     });
 
