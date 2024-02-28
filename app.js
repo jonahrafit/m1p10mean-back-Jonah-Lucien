@@ -29,10 +29,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors());
 //  app.use(verifyToken)
 
-mongoose.connect('mongodb://' +
-  process.env.DB_SERVER + ':' +
-  process.env.DB_PORT + '/' +
-  process.env.DB_NAME);
+// mongoose.connect('mongodb://' +
+//   process.env.DB_SERVER + ':' +
+//   process.env.DB_PORT + '/' +
+//   process.env.DB_NAME);
+
+mongoose.connect(process.env.MONGODB_URL);
 
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'Erreur de connexion à MongoDB :'));
