@@ -4,36 +4,36 @@
 
 ### LISTE DES APIS:
 #### Clients :
-getClients
-ajoutPreferenceEmploye	
-ajoutPreferenceService
-getClientById
+- getClients
+- ajoutPreferenceEmploye	
+- ajoutPreferenceService
+- getClientById
  	
 #### Employes :
-getEmployee	
-getEmployeesByID
-getEmployeesByServiceId
-getEmployeesAvecPlageHoraireVide
-ajoutHoraireTravail
-updateEmployee
-ajoutServiceToEmployee
+- getEmployee
+- getEmployeesByID
+- getEmployeesByServiceId
+- getEmployeesAvecPlageHoraireVide
+- ajoutHoraireTravail
+- updateEmployee
+- ajoutServiceToEmployee
  	
 #### offre-special :
-ajoutOffreSpecial	
-updateOffreSpecial
-getOffreSpecial
-deleteOffreSpecial
+- ajoutOffreSpecial	
+- updateOffreSpecial
+- getOffreSpecial
+- deleteOffreSpecial
  	
 #### Rendez-vous :
-ajoutRendezVous
-getRendezVous
-updateRendezVous
-deleteRendezVous
-getRendezVousByEmployeeBetweenDate
-getRendezVousByEmployee
+- ajoutRendezVous
+- getRendezVous
+- updateRendezVous
+- deleteRendezVous
+- getRendezVousByEmployeeBetweenDate
+- getRendezVousByEmployee
  	
 #### Salon-service :
-getServices	
-ajoutService	
-deleteService	
+- getServices	
+- ajoutService	
+- deleteService	
 updateService
